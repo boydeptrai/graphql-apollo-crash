@@ -1,7 +1,9 @@
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
-
+dotenv.config();
 //Load schema & resolver
 const typeDefs = require('./schema/schema');
 const resolvers = require('./resolver/resolver');
@@ -9,6 +11,11 @@ const resolvers = require('./resolver/resolver');
 const http = require('http');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 
+
+// Connect to MongoDB
+mongoose.connect((process.env.MONGODB_URL),() =>{
+    console.log('Connected to MongoDB')
+})
 async function startServer() {
     const app = express();
     const httpServer = http.createServer(app);

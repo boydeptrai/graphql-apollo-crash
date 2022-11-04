@@ -11,6 +11,8 @@ const resolvers = require('./resolver/resolver');
 const http = require('http');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 
+//Load db method
+const  mongoDataMethods = require('./data/db');
 
 // Connect to MongoDB
 mongoose.connect((process.env.MONGODB_URL),() =>{
@@ -22,6 +24,7 @@ async function startServer() {
     const server = new ApolloServer({
         typeDefs,
         resolvers,
+        context: () =>({mongoDataMethods}),
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
     });
     await server.start();
